@@ -1,7 +1,7 @@
-exports.controllerTemplate=(name)=>{
-    
-    let txt=
-`const ${name.capitalized}=require("../models/${name.lower}Model")
+exports.controllerTemplate = (name) => {
+
+    let txt =
+        `const ${name.capitalized}=require("../models/${name.capitalized}")
 
 exports.create = async(req, res, next) => {
     try {
@@ -43,5 +43,5 @@ exports.remove = async(req, res, next) => {
     }
 };
 `
-return txt
+    return txt
 }

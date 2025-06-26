@@ -3,13 +3,13 @@ const path = require("path");
 
 exports.addApp = (projectDir, more) => {
     const appPath = path.join(projectDir, "app.js");
-    if(!fs.existsSync(appPath))return
+    if (!fs.existsSync(appPath)) return
     let content = fs.readFileSync(appPath, "utf-8");
 
     // Add router require/use only if more.crudName exists
     if (more.crudName) {
         const requireLine = `const ${more.crudName.lower}Router = require("./routers/${more.crudName.lower}Router")\n`;
-        const useLine = `app.use('/${more.crudName.lower}', ${more.crudName.lower}Router)\n`;
+        const useLine = `app.use('/api/v1/${more.crudName.lower}', ${more.crudName.lower}Router)\n`;
 
         if (!content.includes(requireLine)) {
             const requireRegex = /(^const .+require\(.+\);?\s*)+/m;
