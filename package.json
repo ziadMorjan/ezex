@@ -1,0 +1,28 @@
+{
+  "name": "ezex",
+  "version": "1.2.0",
+  "description": "A CLI tool to scaffold Express.js apps quickly.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "ezex": "./app.js"
+  },
+  "keywords": [
+    "express",
+    "cli",
+    "scaffold",
+    "crud",
+    "generator",
+    "starter"
+  ],
+  "author": "Ahmed Ali",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.0",
+    "minimist": "^1.2.8",
+    "prompts": "^2.4.2",
+    "simple-git": "^3.28.0"
+  }
+}
