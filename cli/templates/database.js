@@ -1,14 +1,14 @@
-exports.dbTemplate=
-`
-const mongoose=require("mongoose")
-require("dotenv").config()
+exports.dbTemplate =
+    `const mongoose = require('mongoose');
 
-const dbconnect=()=>{
-    return mongoose.connect(process.env.MONGO_URI)
-    .then(()=>{console.log("✅ MongoDB Connected Successfully")})
-    .catch(err=>{
-        throw new Error("Database Connection Failed: " + err.message)
-    })
+const dbConnect = async (uri) => {
+    try {
+        await mongoose.connect(uri);
+        console.log('MongoDB connected successfully');
+    } catch (error) {
+        console.error('MongoDB connection failed:', error.message);
+        process.exit(-1);
+    }
 }
-exports.dbconnect=dbconnect
+module.exports = { dbConnect }
 `

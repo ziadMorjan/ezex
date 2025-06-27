@@ -26,24 +26,25 @@ You can mix and combine flags to generate controllers, models, routers, custom f
 
 ## 🔧 Available Flags
 
-| Flag       | Description                                                                 |
-|------------|-----------------------------------------------------------------------------|
-| `-c`       | Add one or more controller(s)                                               |
-| `-m`       | Add one or more model(s)                                                    |
-| `-r`       | Add one or more router(s)                                                   |
-| `--crud`   | Create full CRUD (controller + router + model) for given names              |
-| `--all`    | Scaffold full project with recommended structure and features               |
-| `-i`       | Install specific npm packages while creating the project                    |
-| `-d`       | Create one or more custom directories                                       |
-| `-f`       | Create one or more custom files                                             |
-| `--help`   | For briefed help menu                                              |
-| `--version`| Show the current version                                               |
+| Flag        | Description                                                    |
+| ----------- | -------------------------------------------------------------- |
+| `-c`        | Add one or more controller(s)                                  |
+| `-m`        | Add one or more model(s)                                       |
+| `-r`        | Add one or more router(s)                                      |
+| `--crud`    | Create full CRUD (controller + router + model) for given names |
+| `--all`     | Scaffold full project with recommended structure and features  |
+| `-i`        | Install specific npm packages while creating the project       |
+| `-d`        | Create one or more custom directories                          |
+| `-f`        | Create one or more custom files                                |
+| `--help`    | For briefed help menu                                          |
+| `--version` | Show the current version                                       |
 
 > ✅ Flags that accept multiple values can be followed by several names.
 
 ---
 
 ## 💡 Notes
+
 - You can enter the project name if you are in correct folder or full path or just '.' That mean do that here
 - Use `-c`, `-m`, and `-r` **after** creating the project.
 - `--crud` will **create a project first** if one doesn't exist.
@@ -81,15 +82,15 @@ ezex -d src/api -f README.md routers/api.js
 ```bash
 myapp/
 ├── config/
-│   └── dbConnect.js
+│   └── db.js
 ├── controllers/
 │   ├── userController.js
 │   └── postController.js
 ├── middlewares/
 │   └── globalErrorHandler.js
 ├── models/
-│   ├── userModel.js
-│   └── postModel.js
+│   ├── User.js
+│   └── Post.js
 ├── node_modules/
 ├── routers/
 │   ├── userRouter.js
@@ -106,11 +107,9 @@ myapp/
 
 ---
 
-
-
 ## 🧑‍💻 Author
 
-Made with ❤️ by *Ahmed Ali*
+Made with ❤️ by _Ahmed Ali_
 
 ---
 
@@ -122,5 +121,5 @@ Made with ❤️ by *Ahmed Ali*
 
 ## 📌 Tips
 
-- Use combined flags like `--all` with `--crud` to create full option project with full CRUD operations and `-f` with `-d` with `-i` to add custom files and foldes and packages in one shot   .
+- Use combined flags like `--all` with `--crud` to create full option project with full CRUD operations and `-f` with `-d` with `-i` to add custom files and foldes and packages in one shot .
 - Use `--help` for briefed help menu

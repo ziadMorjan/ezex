@@ -27,8 +27,8 @@ exports.addApp = (projectDir, more) => {
             const errorUse = `app.use(globalErrorHandler)\n`;
             if (content.includes(errorUse)) {
                 content = content.replace(errorUse, useLine + errorUse);
-            } else if (content.includes("exports.app=app")) {
-                content = content.replace("exports.app=app", useLine + "exports.app=app");
+            } else if (content.includes("module.exports = app")) {
+                content = content.replace("module.exports = app", useLine + "module.exports = app");
             } else {
                 content += "\n" + useLine;
             }
@@ -84,9 +84,9 @@ exports.addApp = (projectDir, more) => {
 
         const errorUse = `app.use(globalErrorHandler)\n`;
         if (!content.includes(errorUse)) {
-            // Insert just before exports.app=app
-            if (content.includes("exports.app=app")) {
-                content = content.replace("exports.app=app", errorUse + "exports.app=app");
+            // Insert just before module.exports = app
+            if (content.includes("module.exports = app")) {
+                content = content.replace("module.exports = app", errorUse + "module.exports = app");
             } else {
                 content += "\n" + errorUse;
             }
