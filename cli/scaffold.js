@@ -22,9 +22,11 @@ const git = simpleGit();
 const { customErrorTemplate } = require("./templates/customError");
 // Import the new QueryManipulator template
 const { queryManipulatorTemplate } = require("./templates/queryManipulator");
+// Import the generic controller template
+const { generalControllerTemplate } = require("./templates/generalController"); // New import for the generic controller
 
 const foldersArray = ["config", "controllers", "middlewares", "models", "routers", "utils"];
-// filesArray does not include QueryManipulator.js as it's created explicitly
+// filesArray does not include QueryManipulator.js or CustomError.js as they're created explicitly
 const filesArray = ["app.js", "config.env", "server.js", ".gitignore"];
 const packageArray = ["express", "dotenv"];
 const devPackageArray = ["nodemon"];
@@ -55,6 +57,11 @@ exports.scaffoldProject = async (projectDir, more) => {
 
     // Create the QueryManipulator.js file using its dedicated template
     await createFile(projectDir, "utils/QueryManipulator.js", queryManipulatorTemplate);
+
+    // Create the generic Controller.js file in the 'controllers' folder
+    // This uses the template we previously updated, but without a specific name argument,
+    // as it's meant to be a general utility controller.
+    await createFile(projectDir, "controllers/Controller.js", generalControllerTemplate); // Pass an empty object or null if your template requires it
 
     // Now, create other standard files from the filesArray
     await files(filesArray, projectDir);
