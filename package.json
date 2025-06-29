@@ -19,6 +19,7 @@
   "author": "Ahmed Ali",
   "license": "ISC",
   "dependencies": {
+    "@kwsites/file-exists": "^1.1.1",
     "express": "^5.1.0",
     "fs-extra": "^11.3.0",
     "minimist": "^1.2.8",
