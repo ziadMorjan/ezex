@@ -10,7 +10,7 @@ const { server } = require("./templates/server");
 const { app } = require("./templates/app");
 const { exe } = require("./utils/install");
 const { cors } = require("./utils/cors");
-const { errorHandler } = require("./utils/errorMiddleware"); // Updated import path and name
+const { errorHandler } = require("./utils/errorMiddleware"); // Ensure this path is correct if you renamed it
 const { createFolders } = require("./utils/addForlders");
 const { createFile } = require("./utils/addFiles");
 const fs = require("fs");
@@ -18,7 +18,11 @@ const path = require("path");
 const simpleGit = require('simple-git');
 const git = simpleGit();
 
+// Import the new CustomError template
+const { customErrorTemplate } = require("./templates/customError");
+
 const foldersArray = ["config", "controllers", "middlewares", "models", "routers", "utils"];
+// Removed 'utils/CustomError.js' from filesArray as it will be created explicitly below
 const filesArray = ["app.js", "config.env", "server.js", ".gitignore"];
 const packageArray = ["express", "dotenv"];
 const devPackageArray = ["nodemon"];
@@ -41,80 +45,59 @@ let varliables = {
  * @param {string[]} [more.i] - Array of additional packages to install.
  */
 exports.scaffoldProject = async (projectDir, more) => {
-    // Create the main project folder
     await mainFolder(projectDir);
-    // Create standard folders
     await folders(foldersArray, projectDir);
-    // Create standard files
-    await files(filesArray, projectDir);
-    // Create .gitignore file
-    gitignore(projectDir);
 
-    // Add database configuration if requested
+    // Create the CustomError.js file using its dedicated template
+    await createFile(projectDir, "utils/CustomError.js", customErrorTemplate);
+
+    // Now, create other standard files from the filesArray
+    await files(filesArray, projectDir);
+
+    gitignore(projectDir);
     if (more.db) {
         packageArray.push("mongoose");
         database(projectDir);
-        varliables.MONGO_URI = "Add your mongo url here"; // Placeholder for MongoDB URI
+        varliables.MONGO_URI = "Add your mongo url here";
     }
-
-    // Add default app.js and server.js files if requested
     if (more.app) {
-        server(projectDir, more.db ?? null); // Pass db status to server template
+        server(projectDir, more.db ?? null);
         app(projectDir);
     }
-
-    // Add CORS configuration if requested
     if (more.cors) {
         packageArray.push("cors");
         cors(projectDir);
     }
-
-    // Add global error handling if requested
     if (more.err) {
-        errorHandler(projectDir); // Updated function call
+        errorHandler(projectDir);
     }
-
-    // Create custom directories if requested
     if (more.d) {
         more.d.forEach(folder => {
             createFolders(projectDir, folder);
         });
     }
-
-    // Create custom files if requested
     if (more.f) {
         more.f.forEach(file => {
+            // This call is for user-specified custom files via --f flag.
+            // CustomError.js is handled explicitly above.
             createFile(projectDir, file);
         });
     }
-
-    // Add additional packages to installation list if requested
     if (more.i) {
         more.i.forEach(pkg => {
             packageArray.push(pkg);
         });
     }
-
-    // Generate the environment configuration file
     await generateEnvTemplate(varliables, projectDir);
+    const commandsArray = ["npm init -y", "npm i --save " + packageArray.join(' ') + "", "npm i --save-dev " + devPackageArray.join(' ') + ""];
 
-    // Define npm installation commands
-    const commandsArray = [
-        "npm init -y",
-        "npm i --save " + packageArray.join(' '),
-        "npm i --save-dev " + devPackageArray.join(' ')
-    ];
-
-    // Execute the npm installation commands
     await exe(commandsArray, projectDir);
-
-    // Initialize Git repository if requested
     if (more.git) {
         try {
             console.log('Initializing Git repository...');
             await git.cwd(projectDir).init();
-            await git.add('./*'); // Add all files to staging
-            await git.commit('Initial commit'); // Commit the initial changes
+            await git.add('./*');
+            await git.commit('Initial commit');
             console.log('Git repository initialized');
         } catch (err) {
             console.error('Git init failed:', err.message);
