@@ -18,11 +18,13 @@ const path = require("path");
 const simpleGit = require('simple-git');
 const git = simpleGit();
 
-// Import the new CustomError template
+// Import the CustomError template
 const { customErrorTemplate } = require("./templates/customError");
+// Import the new QueryManipulator template
+const { queryManipulatorTemplate } = require("./templates/queryManipulator");
 
 const foldersArray = ["config", "controllers", "middlewares", "models", "routers", "utils"];
-// Removed 'utils/CustomError.js' from filesArray as it will be created explicitly below
+// filesArray does not include QueryManipulator.js as it's created explicitly
 const filesArray = ["app.js", "config.env", "server.js", ".gitignore"];
 const packageArray = ["express", "dotenv"];
 const devPackageArray = ["nodemon"];
@@ -51,6 +53,9 @@ exports.scaffoldProject = async (projectDir, more) => {
     // Create the CustomError.js file using its dedicated template
     await createFile(projectDir, "utils/CustomError.js", customErrorTemplate);
 
+    // Create the QueryManipulator.js file using its dedicated template
+    await createFile(projectDir, "utils/QueryManipulator.js", queryManipulatorTemplate);
+
     // Now, create other standard files from the filesArray
     await files(filesArray, projectDir);
 
@@ -78,8 +83,6 @@ exports.scaffoldProject = async (projectDir, more) => {
     }
     if (more.f) {
         more.f.forEach(file => {
-            // This call is for user-specified custom files via --f flag.
-            // CustomError.js is handled explicitly above.
             createFile(projectDir, file);
         });
     }
