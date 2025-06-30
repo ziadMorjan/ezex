@@ -4,11 +4,12 @@ const fs = require("fs");
 const path = require("path");
 
 /**
- * Adds features (routers, CORS, error handling) to the app.js file.
+ * Adds features (routers, CORS, morgan, error handling) to the app.js file.
  * @param {string} projectDir - The root directory of the project.
  * @param {object} more - An object containing features to add.
  * @param {object} [more.crudName] - Object with lower and capitalized names for CRUD module.
  * @param {boolean} [more.cors] - Whether to add CORS configuration.
+ * @param {boolean} [more.morgan] - Whether to add morgan configuration.
  * @param {boolean} [more.error] - Whether to add global error handling.
  */
 exports.addApp = (projectDir, more) => {
@@ -68,7 +69,7 @@ exports.addApp = (projectDir, more) => {
             }
         }
 
-        const corsUse = `app.use(cors({\n  origin: '*',\n  methods: ['GET', 'POST'],\n  allowedHeaders: ['Content-Type', 'Authorization']\n}));\n`;
+        const corsUse = `app.use(cors({\n  origin: '*',\n  methods: ['GET', 'POST', 'PATCH', 'DELETE'],\n  allowedHeaders: ['Content-Type', 'Authorization']\n}));\n`;
         // Add the app.use statement if it's not already present
         if (!content.includes(corsUse)) {
             // Insert after "const app = express()" if it exists
@@ -84,6 +85,42 @@ exports.addApp = (projectDir, more) => {
                     content = content.replace(lastRequire, lastRequire + corsUse);
                 } else {
                     content = corsUse + content;
+                }
+            }
+        }
+    }
+
+    // Add morgan require/use only if more.morgan is true
+    if (more.morgan) {
+        const morganRequire = `const morgan = require('morgan');\n`;
+        // Add the require statement if it's not already present
+        if (!content.includes(morganRequire)) {
+            const requireRegex = /(^const .+require\(.+\);?\s*)+/m;
+            const match = content.match(requireRegex);
+            if (match) {
+                const lastRequire = match[0];
+                content = content.replace(lastRequire, lastRequire + morganRequire);
+            } else {
+                content = morganRequire + content;
+            }
+        }
+
+        const morganUse = `app.use(morgan("dev"));\n`;
+        // Add the app.use statement if it's not already present
+        if (!content.includes(morganUse)) {
+            // Insert after "const app = express()" if it exists
+            const appInitRegex = /(const\s+app\s*=\s*express\s*\(\s*\)\s*;?\s*\n)/;
+            if (appInitRegex.test(content)) {
+                content = content.replace(appInitRegex, `$1${morganUse}`);
+            } else {
+                // fallback: after last require
+                const requireRegex = /(^const .+require\(.+\);?\s*)+/m;
+                const match = content.match(requireRegex);
+                if (match) {
+                    const lastRequire = match[0];
+                    content = content.replace(lastRequire, lastRequire + morganUse);
+                } else {
+                    content = morganUse + content;
                 }
             }
         }

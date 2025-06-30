@@ -1,5 +1,5 @@
 exports.help = () =>
-    console.log(`ezex - Express Scaffold CLI
+  console.log(`ezex - Express Scaffold CLI
 
 This tool will create a scaffolded Express project, asking for some options.
 
@@ -23,7 +23,7 @@ NOTES:
   - --crud will create a project first if one does not exist.
   - You can combine --crud and --all to create a project with full options and CRUD support (recommended).
   - All flags that accept multiple values can be followed by several names.
-  - For a full options project (--all), the following packages will be installed by default: express, dotenv, mongoose, cors, nodemon .
+  - For a full options project (--all), the following packages will be installed by default: express, dotenv, mongoose, cors, morgan, nodemon .
 
 EXAMPLES:
   ezex --crud user post

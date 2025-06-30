@@ -10,6 +10,7 @@ const { server } = require("./templates/server");
 const { app } = require("./templates/app");
 const { exe } = require("./utils/install");
 const { cors } = require("./utils/cors");
+const { morgan } = require("ezex/cli/utils/morgan");
 const { errorHandler } = require("./utils/errorMiddleware"); // Ensure this path is correct if you renamed it
 const { createFolders } = require("./utils/addForlders");
 const { createFile } = require("./utils/addFiles");
@@ -42,6 +43,7 @@ let varliables = {
  * @param {boolean} [more.db] - Whether to include database configuration.
  * @param {boolean} [more.app] - Whether to include default app.js and server.js.
  * @param {boolean} [more.cors] - Whether to include CORS configuration.
+ * @param {boolean} [more.morgan] - Whether to include morgan configuration.
  * @param {boolean} [more.err] - Whether to include global error handling.
  * @param {boolean} [more.git] - Whether to initialize a Git repository.
  * @param {string[]} [more.d] - Array of custom directories to create.
@@ -79,6 +81,10 @@ exports.scaffoldProject = async (projectDir, more) => {
     if (more.cors) {
         packageArray.push("cors");
         cors(projectDir);
+    }
+    if (more.morgan) {
+        packageArray.push("morgan");
+        morgan(projectDir);
     }
     if (more.err) {
         errorHandler(projectDir);

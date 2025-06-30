@@ -9,7 +9,7 @@ exports.askProjectName = async () => {
   return projectName;
 };
 
-exports.askAddMoreFeatures=async()=>{
+exports.askAddMoreFeatures = async () => {
   const { addMore } = await prompts({
     type: 'toggle',
     name: 'addMore',
@@ -24,10 +24,10 @@ exports.askAddMoreFeatures=async()=>{
     active: 'yes',
     inactive: 'no'
   });
-  return {addMore,addgit};
+  return { addMore, addgit };
 }
 
-exports.askOptionalFeatures=async()=>{
+exports.askOptionalFeatures = async () => {
   const { addDatabase } = await prompts({
     type: 'toggle',
     name: 'addDatabase',
@@ -50,6 +50,13 @@ exports.askOptionalFeatures=async()=>{
     active: 'yes',
     inactive: 'no'
   });
+  const { morgan } = await prompts({
+    type: 'toggle',
+    name: 'morgan',
+    message: 'Do you want to add the morgan configuration?',
+    active: 'yes',
+    inactive: 'no'
+  });
   const { globalError } = await prompts({
     type: 'toggle',
     name: 'globalError',
@@ -58,10 +65,10 @@ exports.askOptionalFeatures=async()=>{
     inactive: 'no'
   });
 
-  return { addDatabase, appfile,cors,globalError };
+  return { addDatabase, appfile, cors, morgan, globalError };
 }
-exports.askToOpen=async()=>{
-  const { askToOpen }= await prompts({
+exports.askToOpen = async () => {
+  const { askToOpen } = await prompts({
     type: 'toggle',
     name: 'askToOpen',
     message: 'Do you want to open the project in vscode window?',
