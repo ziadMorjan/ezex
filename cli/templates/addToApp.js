@@ -20,8 +20,8 @@ exports.addApp = (projectDir, more) => {
 
     // Add router require/use only if more.crudName exists
     if (more.crudName) {
-        const requireLine = `const ${more.crudName.lower}Router = require("./routers/${more.crudName.lower}Router")\n`;
-        const useLine = `app.use('/api/v1/${more.crudName.lower}', ${more.crudName.lower}Router)\n`;
+        const requireLine = `const ${more.crudName.lower}Router = require("./routers/${more.crudName.lower}Router");\n`;
+        const useLine = `app.use('/api/v1/${more.crudName.lower}s', ${more.crudName.lower}Router);\n`;
 
         // Add the require statement if it's not already present
         if (!content.includes(requireLine)) {
@@ -40,12 +40,12 @@ exports.addApp = (projectDir, more) => {
         // Add the app.use statement if it's not already present
         if (!content.includes(useLine)) {
             // If error handler is present, insert router use before it for correct middleware order
-            const errorUse = `app.use(globalErrorHandler)\n`;
+            const errorUse = `app.use(globalErrorHandler);\n`;
             if (content.includes(errorUse)) {
                 content = content.replace(errorUse, useLine + errorUse);
-            } else if (content.includes("module.exports = app")) {
+            } else if (content.includes("module.exports = app;")) {
                 // Insert before module.exports
-                content = content.replace("module.exports = app", useLine + "module.exports = app");
+                content = content.replace("module.exports = app;", useLine + "module.exports = app;");
             } else {
                 // Fallback: add at the end
                 content += "\n" + useLine;
@@ -92,7 +92,7 @@ exports.addApp = (projectDir, more) => {
     // Add global error handling if more.error is true
     if (more.error) {
         // Updated path for globalErrorHandler
-        const errorRequire = `const {globalErrorHandler}=require("./middlewares/errorMiddleware")\n`;
+        const errorRequire = `const {globalErrorHandler}=require("./middlewares/errorMiddleware");\n`;
         // Add the require statement if it's not already present
         if (!content.includes(errorRequire)) {
             // Insert after last require
@@ -106,12 +106,12 @@ exports.addApp = (projectDir, more) => {
             }
         }
 
-        const errorUse = `app.use(globalErrorHandler)\n`;
+        const errorUse = `app.use(globalErrorHandler);\n`;
         // Add the app.use statement if it's not already present
         if (!content.includes(errorUse)) {
             // Insert just before module.exports = app
-            if (content.includes("module.exports = app")) {
-                content = content.replace("module.exports = app", errorUse + "module.exports = app");
+            if (content.includes("module.exports = app;")) {
+                content = content.replace("module.exports = app;", errorUse + "module.exports = app;");
             } else {
                 // Fallback: add at the end
                 content += "\n" + errorUse;

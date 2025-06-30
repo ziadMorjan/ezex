@@ -1,22 +1,17 @@
-exports.routerTemplate = ({ lower, capitalized }) => 
-`const express = require('express');
+exports.routerTemplate = ({ lower, capitalized }) =>
+    `const express = require('express');
 const router = express.Router();
 const ${lower}Controller = require('../controllers/${lower}Controller');
 
-// Create
-router.post('/', ${lower}Controller.create);
+router.route('/')
+    .get(${lower}Controller.getAll${capitalized}s)
+    .post(${lower}Controller.create${capitalized});
 
-// Read all
-router.get('/', ${lower}Controller.getAll);
 
-// Read one
-router.get('/:id', ${lower}Controller.getOne);
-
-// Update
-router.put('/:id', ${lower}Controller.update);
-
-// Delete
-router.delete('/:id', ${lower}Controller.remove);
-
+router.route('/:id')
+    .get(${lower}Controller.get${capitalized})
+    .patch(${lower}Controller.update${capitalized})
+    .delete(${lower}Controller.delete${capitalized});
+    
 module.exports = router;
 `;
