@@ -6,7 +6,7 @@ const path = require('path');
 /**
  * Creates a new file at the given filePath within the project directory.
  * If the parent directories do not exist, they will be created recursively.
- * If the file already exists, it will be overwritten (unless content is provided).
+ * If the file already exists, a message will be displayed, and the file will not be overwritten.
  *
  * @param {string} projectDir - The root directory of the project.
  * @param {string} filePath - The path to the file relative to the project directory (e.g., 'src/data/config.js').
@@ -27,7 +27,12 @@ exports.createFile = async (projectDir, filePath, content = "") => {
         fs.mkdirSync(dirName, { recursive: true });
     }
 
-    // Write content to the file. If file exists, its content will be replaced.
-    fs.writeFileSync(fullFilePath, content);
-    console.log(`File created: ${fullFilePath}`);
+    // Check if the file already exists
+    if (fs.existsSync(fullFilePath)) {
+        console.log(`File already exists: ${fullFilePath}. Skipping creation.`);
+    } else {
+        // Write content to the file only if it does not exist
+        fs.writeFileSync(fullFilePath, content);
+        console.log(`File created: ${fullFilePath}`);
+    }
 };
