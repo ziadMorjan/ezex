@@ -67,6 +67,23 @@ exports.askOptionalFeatures = async () => {
 
   return { addDatabase, appfile, cors, morgan, globalError };
 }
+
+// New prompt function to ask about template choice
+exports.askTemplateChoice = async (type) => {
+  const { templateType } = await prompts({
+    type: 'select',
+    name: 'templateType',
+    message: `Choose a template for your new ${type}:`,
+    choices: [
+      { title: 'Default (based on crud)', value: 'default' },
+      { title: 'Empty', value: 'empty' }
+    ],
+    initial: 0
+  });
+  return templateType;
+};
+
+
 exports.askToOpen = async () => {
   const { askToOpen } = await prompts({
     type: 'toggle',
