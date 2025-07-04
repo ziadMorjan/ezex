@@ -10,8 +10,8 @@ const { server } = require("./templates/server");
 const { app } = require("./templates/app");
 const { exe } = require("./utils/install");
 const { cors } = require("./utils/cors");
-const { morgan } = require("ezex/cli/utils/morgan");
-const { errorHandler } = require("./utils/errorMiddleware"); // Ensure this path is correct if you renamed it
+const { morgan } = require("./utils/morgan");
+const { errorHandler } = require("./utils/errorMiddleware");
 const { createFolders } = require("./utils/addForlders");
 const { createFile } = require("./utils/addFiles");
 const fs = require("fs");
@@ -24,11 +24,10 @@ const { customErrorTemplate } = require("./templates/customError");
 // Import the new QueryManipulator template
 const { queryManipulatorTemplate } = require("./templates/queryManipulator");
 // Import the generic controller template
-const { generalControllerTemplate } = require("./templates/generalController"); // New import for the generic controller
+const { generalControllerTemplate } = require("./templates/generalController");
 
 const foldersArray = ["config", "controllers", "middlewares", "models", "routers", "utils"];
-// filesArray does not include QueryManipulator.js or CustomError.js as they're created explicitly
-const filesArray = ["app.js", "config.env", "server.js", ".gitignore"];
+const filesArray = ["config.env", ".gitignore"];
 const packageArray = ["express", "dotenv"];
 const devPackageArray = ["nodemon"];
 
@@ -54,30 +53,32 @@ exports.scaffoldProject = async (projectDir, more) => {
     await mainFolder(projectDir);
     await folders(foldersArray, projectDir);
 
-    // Create the CustomError.js file using its dedicated template
+    // Create core utility files
     await createFile(projectDir, "utils/CustomError.js", customErrorTemplate);
-
-    // Create the QueryManipulator.js file using its dedicated template
     await createFile(projectDir, "utils/QueryManipulator.js", queryManipulatorTemplate);
+    await createFile(projectDir, "controllers/Controller.js", generalControllerTemplate);
 
-    // Create the generic Controller.js file in the 'controllers' folder
-    // This uses the template we previously updated, but without a specific name argument,
-    // as it's meant to be a general utility controller.
-    await createFile(projectDir, "controllers/Controller.js", generalControllerTemplate); // Pass an empty object or null if your template requires it
-
-    // Now, create other standard files from the filesArray
+    // Create other standard files
     await files(filesArray, projectDir);
 
+    // Gitignore is always created
     gitignore(projectDir);
+
+    // Always create app.js and server.js with their base content
+    await app(projectDir);
+    await server(projectDir, more.db ?? null);
+
+    // Always include global error handling
+    // This will create middlewares/errorMiddleware.js and add its usage to app.js
+    await errorHandler(projectDir);
+
+    // Conditional features
     if (more.db) {
         packageArray.push("mongoose");
         database(projectDir);
         varliables.MONGO_URI = "Add your mongo url here";
     }
-    if (more.app) {
-        server(projectDir, more.db ?? null);
-        app(projectDir);
-    }
+
     if (more.cors) {
         packageArray.push("cors");
         cors(projectDir);
@@ -86,9 +87,11 @@ exports.scaffoldProject = async (projectDir, more) => {
         packageArray.push("morgan");
         morgan(projectDir);
     }
-    if (more.err) {
-        errorHandler(projectDir);
-    }
+    // Note: more.err is no longer needed here as errorHandler is always called.
+    // It can still be used in `prepareProject` if you want to track the user's initial choice,
+    // but it won't prevent error handling from being added.
+
+    // Handle custom directories, files, and additional packages
     if (more.d) {
         more.d.forEach(folder => {
             createFolders(projectDir, folder);
@@ -104,6 +107,7 @@ exports.scaffoldProject = async (projectDir, more) => {
             packageArray.push(pkg);
         });
     }
+
     await generateEnvTemplate(varliables, projectDir);
     const commandsArray = ["npm init -y", "npm i --save " + packageArray.join(' ') + "", "npm i --save-dev " + devPackageArray.join(' ') + ""];
 

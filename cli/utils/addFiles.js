@@ -15,7 +15,7 @@ const path = require('path');
 exports.createFile = async (projectDir, filePath, content = "") => {
     const projectExists = fs.existsSync(projectDir);
     if (!projectExists) {
-        console.log("There is no project with that name");
+        console.log("Error: Project directory does not exist.");
         return; // Exit if the project directory does not exist
     }
 
