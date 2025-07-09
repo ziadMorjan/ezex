@@ -117,7 +117,7 @@ exports.scaffoldProject = async (projectDir, more) => {
             console.log('Initializing Git repository...');
             await git.cwd(projectDir).init();
             await git.add('./*');
-            await git.commit('Initial commit');
+            await git.commit('Init the project');
             console.log('Git repository initialized');
         } catch (err) {
             console.error('Git init failed:', err.message);
