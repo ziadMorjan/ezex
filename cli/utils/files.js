@@ -11,10 +11,10 @@ const { createFile } = require('./addFiles');
  * @param {string} projectDir - The root directory of the project.
  */
 exports.files = async (filesArray, projectDir) => {
-    for (const file of filesArray) {
-        // Use the new createFile function which handles directory creation and content
-        // For general filesArray, we pass an empty string as content, as they are typically empty.
-        await createFile(projectDir, file, "");
-    }
-    console.log("All specified files have been created.");
+	for (const file of filesArray) {
+		// Use the new createFile function which handles directory creation and content
+		// For general filesArray, we pass an empty string as content, as they are typically empty.
+		await createFile(projectDir, file, '');
+	}
+	console.log('All specified files have been created.');
 };

@@ -1,5 +1,5 @@
-const {addApp}=require("../templates/addToApp")
+const { modifyApp } = require('../templates/modifyApp')
 
-exports.cors=async(projectDir)=>{
-    addApp(projectDir,{cors:true})
+exports.cors = async (projectDir) => {
+	modifyApp(projectDir, { cors: true })
 }

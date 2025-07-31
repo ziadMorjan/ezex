@@ -1,45 +1,42 @@
-exports.help = () =>
-  console.log(`ezex - Express Scaffold CLI
 
-This tool helps you scaffold and extend Express.js projects quickly and consistently.
+exports.help = () =>
+	console.log(`
+⚡ ezex - Express Scaffold CLI (v2.0)
+
+This tool helps you scaffold and extend modern Express.js projects with ES Modules, ESLint, and Prettier.
 
 USAGE:
   ezex [flags] [names...]
 
 FLAGS:
-  -c           Add one or more controller(s) to an existing project.
-  -m           Add one or more model(s) to an existing project.
-  -r           Add one or more router(s) to an existing project.
-  --crud       Create full CRUD (controller + router + model) for given names. Creates a new project if one doesn't exist.
-  --all        Scaffold a full project with recommended structure and features.
-  -i           Install specific npm packages. Can be used with new or existing projects.
-  -d           Create one or more custom directories. Can be used with new or existing projects.
-  -f           Create one or more custom files. Can be used with new or existing projects.
-  --help       Show this help menu.
-  --version    Show the current version.
+  -c, --controller    Add one or more controller(s) to an existing project.
+  -m, --model         Add one or more model(s) to an existing project.
+  -r, --router        Add one or more router(s) to an existing project.
+  --crud              Create full CRUD (controller + router + model) for given names.
+  --all               Scaffold a full project with recommended structure and features.
+  -i, --install       Install specific npm packages.
+  -d, --dir           Create one or more custom directories.
+  -f, --file          Create one or more custom files.
+  --help              Show this help menu.
+  --version           Show the current version.
 
 NOTES:
-  - You can enter the project name, a full path, or '.' (dot) to use the current directory.
-  - Flags -c, -m, -r require an existing project.
-  - Flags -d, -f, -i can be used with an existing project without re-scaffolding its core files (like app.js, server.js).
-  - --crud will create a project first if one does not exist.
-  - Combine --all and --crud for a full setup with useful features (recommended for new projects).
-  - All flags that accept multiple values can be followed by several names.
-  - For a full options project (--all), the following packages will be installed by default: express, dotenv, mongoose, cors, morgan, nodemon.
+  - Generated projects use ES Modules by default.
+  - ESLint and Prettier are included for code quality and formatting.
+  - Use '.' (dot) to target the current directory.
+  - --crud will create a project if one doesn't exist.
+  - --all installs: express, dotenv, mongoose, cors, morgan, nodemon, eslint, prettier and configs.
 
 EXAMPLES:
-  # Create a full project with CRUD for 'user' and 'post' (creates project if needed)
-  ezex --crud user post
+  # Create a full-featured project with CRUD for 'user' and 'product'
+  ezex my-api --all --crud user product
 
-  # Create a full-featured project and install extra packages
-  ezex --all --crud -i socket.io body-parser
+  # Add a new CRUD module to an existing project
+  ezex . --crud review
 
-  # Add controllers for an existing project
-  ezex -c user post
+  # Add a controller and a model separately
+  ezex . -c auth -m token
 
-  # Add a directory and some custom files to an existing project (will not overwrite app.js/server.js)
-  ezex -d src/api -f README.md routers/api.js
-
-  # Install a package to an existing project (will not overwrite app.js/server.js)
-  ezex -i chalk
+  # Install a package and create a new directory
+  ezex . -i bcryptjs -d services
 `);

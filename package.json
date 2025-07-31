@@ -1,7 +1,8 @@
 {
   "name": "ezex",
-  "version": "1.2.0",
-  "description": "A CLI tool to scaffold Express.js apps quickly.",
+  "version": "2.0.0",
+  "description": "A modern CLI tool to scaffold Express.js apps with ESM, ESLint, and more.",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,16 +13,14 @@
     "express",
     "cli",
     "scaffold",
-    "crud",
     "generator",
-    "starter"
+    "starter",
+    "esm",
+    "eslint"
   ],
-  "author": "Ahmed Ali",
+  "author": "Ahmed Ali (Updated by Gemini)",
   "license": "ISC",
   "dependencies": {
-    "@kwsites/file-exists": "^1.1.1",
-    "express": "^5.1.0",
-    "fs-extra": "^11.3.0",
     "minimist": "^1.2.8",
     "prompts": "^2.4.2",
     "simple-git": "^3.28.0"

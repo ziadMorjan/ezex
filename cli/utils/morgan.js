@@ -1,5 +1,5 @@
-const { addApp } = require("../templates/addToApp")
+const { modifyApp } = require('../templates/modifyApp')
 
 exports.morgan = async (projectDir) => {
-    addApp(projectDir, { morgan: true })
+	modifyApp(projectDir, { morgan: true })
 }

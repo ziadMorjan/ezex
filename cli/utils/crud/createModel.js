@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const { modelTemplate } = require("../../templates/model")
+const { modelTemplate } = require('../../templates/model')
 exports.createModel = async (projectDir, crudName) => {
-    if (!(fs.existsSync(path.join(projectDir, "models")))) {
-        fs.mkdirSync(path.join(projectDir, "models"))
-    }
-    fs.writeFileSync(path.join(projectDir, "models", crudName.capitalized + ".js"), modelTemplate(crudName))
+	const modelsDir = path.join(projectDir, 'models');
+	if (!fs.existsSync(modelsDir)) {
+		fs.mkdirSync(modelsDir);
+	}
+	fs.writeFileSync(path.join(modelsDir, `${crudName.capitalized}.js`), modelTemplate(crudName));
+	console.log(`Model created: ${crudName.capitalized}.js`);
 }

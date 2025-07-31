@@ -1,17 +1,25 @@
+// استخدام ESM
+
 exports.routerTemplate = ({ lower, capitalized }) =>
-    `const express = require('express');
+	`import express from 'express';
+import {
+	getAll${capitalized}s,
+	create${capitalized},
+	get${capitalized},
+	update${capitalized},
+	delete${capitalized},
+} from '../controllers/${lower}Controller.js';
+
 const router = express.Router();
-const ${lower}Controller = require('../controllers/${lower}Controller');
 
 router.route('/')
-    .get(${lower}Controller.getAll${capitalized}s)
-    .post(${lower}Controller.create${capitalized});
-
+    .get(getAll${capitalized}s)
+    .post(create${capitalized});
 
 router.route('/:id')
-    .get(${lower}Controller.get${capitalized})
-    .patch(${lower}Controller.update${capitalized})
-    .delete(${lower}Controller.delete${capitalized});
+    .get(get${capitalized})
+    .patch(update${capitalized})
+    .delete(delete${capitalized});
     
-module.exports = router;
+export default router;
 `;

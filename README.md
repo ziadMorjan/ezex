@@ -1,12 +1,22 @@
-# ⚡ ezex - Express Scaffold CLI
+# ⚡ ezex - Modern Express Scaffold CLI (v2.0)
 
-**ezex** is a powerful command-line tool that helps you scaffold and extend **Express.js** projects quickly and consistently. Whether you're building a simple API or a complete backend with models, routers, and controllers — ezex saves you time and effort.
+**ezex** is a powerful, modernized command-line tool that helps you scaffold and extend **Express.js** projects with best practices. It now generates projects using **ES Modules (ESM)** by default and integrates **ESLint** and **Prettier** for superior code quality and consistency right from the start.
+
+---
+
+## ✨ Key Features
+
+- **ESM First**: Generates projects using modern ES Modules syntax (`import`/`export`).
+- **Code Quality Built-in**: Automatically sets up ESLint and Prettier with sensible defaults.
+- **Intelligent Scaffolding**: Creates full CRUD structures (Model, Controller, Router) with a single command.
+- **Highly Customizable**: Add features like CORS, Morgan, and MongoDB support interactively.
+- **Developer-Friendly**: Improved error messages and a streamlined workflow.
 
 ---
 
 ## 📦 Installation
 
-Install globally to use from anywhere:
+Install globally to use from any terminal:
 
 ```bash
 npm install -g ezex
@@ -14,110 +24,126 @@ npm install -g ezex
 
 ---
 
-## 🚀 Usage
+## 🚀 Quick Start
+
+Create a new, full-featured API project named `my-awesome-api` with a `user` CRUD module in one command:
 
 ```bash
-ezex [flags] [names...]
+ezex my-awesome-api --all --crud user
 ```
 
-You can mix and match flags to generate controllers, models, routers, custom files, and directories.
+This will create a new directory, initialize git, install all dependencies, and set up a complete server ready for you to code.
 
 ---
 
-## 🔧 Available Flags
+## 🔧 Usage & Commands
 
-| Flag        | Description                                                                      |
-| ----------- | -------------------------------------------------------------------------------- |
-| `-c`        | Add one or more controller(s) to an existing project.                            |
-| `-m`        | Add one or more model(s) to an existing project.                                 |
-| `-r`        | Add one or more router(s) to an existing project.                                |
-| `--crud`    | Create full CRUD (controller + router + model). Creates a new project if needed. |
-| `--all`     | Scaffold a full project with recommended structure and dependencies.             |
-| `-i`        | Install specific npm packages. Works with new or existing projects.              |
-| `-d`        | Create one or more custom directories.                                           |
-| `-f`        | Create one or more custom files.                                                 |
-| `--help`    | Show help menu.                                                                  |
-| `--version` | Show the current version.                                                        |
-
-✅ Flags that accept multiple values can be followed by several names.
-
----
-
-## 💡 Notes
-
-- Use the project name, a full path, or `.` to target the current directory.
-- `--crud` will create the project first if it doesn't exist.
-- Flags `-d`, `-f`, and `-i` only perform their actions on existing projects and **will not overwrite** core files like `app.js` or `server.js`.
-- `--all` installs the following packages: `express`, `dotenv`, `mongoose`, `cors`, `morgan`, `nodemon`.
-
----
-
-## 🧪 Examples
+The general syntax is:
 
 ```bash
-# Create a full project with CRUD for 'user' and 'post'
-ezex --crud user post
+ezex [project-name-or-path] [flags] [names...]
+```
 
-# Create a full-featured project and install extra packages
-ezex --all --crud -i socket.io body-parser
+### Available Flags
 
-# Add controllers to an existing project
-ezex -c user post
+| Flag               | Alias | Description                                                              |
+| ------------------ | ----- | ------------------------------------------------------------------------ |
+| `--all`            |       | Scaffold a full project with all recommended features.                   |
+| `--crud`           |       | Create a full CRUD module (Model, Controller, Router).                   |
+| `--controller`     | `-c`  | Add one or more controller(s) to an existing project.                    |
+| `--model`          | `-m`  | Add one or more model(s).                                                |
+| `--router`         | `-r`  | Add one or more router(s).                                               |
+| `--install`        | `-i`  | Install specific npm packages.                                           |
+| `--dir`            | `-d`  | Create one or more custom directories.                                   |
+| `--file`           | `-f`  | Create one or more custom files.                                         |
+| `--help`           |       | Show this help menu.                                                     |
+| `--version`        |       | Show the current version of ezex.                                        |
 
-# Add a directory and custom files to an existing project
-ezex -d src/api -f README.md routers/api.js
+✅ Flags that accept multiple values (like `--crud`) can be followed by several names (e.g., `... --crud user post product`).
 
-# Install a package in an existing project
-ezex -i chalk
+---
+
+## 💡 Advanced Examples
+
+### 1. Create a New Project Interactively
+
+If you run `ezex` without the `--all` flag, it will guide you through an interactive setup process.
+
+```bash
+ezex my-new-project
+```
+
+This will start an interactive prompt
+
+### 2. Add a New CRUD Module to an Existing Project
+
+#### Assuming you are inside your project folder
+
+```bash
+ezex . --crud review
+```
+
+#### 3. Add Components Separately
+
+You can generate individual parts of your application as needed.
+
+```bash
+ezex . --controller auth --model token
+```
+
+ Add a controller for authentication and a model for refresh tokens
+
+#### 4. Use the Integrated Linter and Formatter
+
+The generated project includes scripts for ESLint and Prettier.
+
+Lint your entire project
+
+```bash
+npm run lint
+npm run format
 ```
 
 ---
 
-## 📁 Output Structure Example
+## 📁 Generated Project Structure
 
-```bash
-myapp/
+A project created with `ezex --all --crud user` will look like this:
+
+```my-api/
 ├── config/
-│   └── db.js
+│   └── db.js               # MongoDB connection logic
 ├── controllers/
-│   ├── userController.js
-│   └── postController.js
+│   ├── Controller.js       # Generic CRUD functions
+│   └── userController.js   # User-specific controller
 ├── middlewares/
-│   └── errorMiddleware.js
+│   └── errorMiddleware.js  # Global error handler
 ├── models/
-│   ├── User.js
-│   └── Post.js
+│   └── User.js             # User Mongoose model
 ├── node_modules/
 ├── routers/
-│   ├── userRouter.js
-│   └── postRouter.js
+│   └── userRouter.js       # User API routes
 ├── utils/
-├── .env
+│   ├── CustomError.js
+│   └── QueryManipulator.js
+├── .env                    # Environment variables (GIT-ignored)
+├── .eslintrc.json          # ESLint configuration
 ├── .gitignore
-├── app.js
+├── .prettierrc             # Prettier configuration
+├── app.js                  # Express app setup
 ├── package.json
 ├── package-lock.json
-└── server.js
+└── server.js               # Server entry point
 ```
 
 ---
 
 ## 🧑‍💻 Author
 
-Made with ❤️ by **Ahmed Ali**
+Made with ❤️ by **Ahmed Ali** & enhanced by **Ziad Morjan**.
 
 ---
 
-## 🪪 License
+## License
 
 [ISC License](https://opensource.org/licenses/ISC)
-
----
-
-## 📌 Tips
-
-- Use `--all` with `--crud` for a complete ready-to-use setup.
-- Combine `-f`, `-d`, and `-i` to quickly extend existing projects.
-- Run `ezex --help` for a quick reference guide.
-
----

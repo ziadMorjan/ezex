@@ -1,14 +1,15 @@
-const path = require("path")
-const fs = require("fs")
+const path = require('path')
+const fs = require('fs')
 exports.app = async (projectDir, more) => {
-    const txt =
-        `const express = require("express");
+	const txt =
+		`import express from 'express';
 
 const app = express();
 
+// Middlewares
+app.use(express.json());
 
-module.exports = app;
+export default app;
 `
-    fs.writeFileSync(path.join(projectDir, "app.js"), txt)
-
+	fs.writeFileSync(path.join(projectDir, 'app.js'), txt)
 }

@@ -1,96 +1,61 @@
 const prompts = require('prompts');
 
 exports.askProjectName = async () => {
-  const { projectName } = await prompts({
-    type: 'text',
-    name: 'projectName',
-    message: 'Project name or full path:'
-  });
-  return projectName;
+	const { projectName } = await prompts({
+		type: 'text',
+		name: 'projectName',
+		message: 'Enter project name or path (e.g., my-api or .):'
+	});
+	return projectName;
 };
 
-exports.askAddMoreFeatures = async () => {
-  const { addMore } = await prompts({
-    type: 'toggle',
-    name: 'addMore',
-    message: 'Do you want to add more features?',
-    active: 'yes',
-    inactive: 'no'
-  });
-  const { addgit } = await prompts({
-    type: 'toggle',
-    name: 'addgit',
-    message: 'Do you want to initialize a GitHub repository?',
-    active: 'yes',
-    inactive: 'no'
-  });
-  return { addMore, addgit };
+exports.askForFeatures = async () => {
+	const { features } = await prompts([
+		{
+			type: 'multiselect',
+			name: 'features',
+			message: 'Select features to include:',
+			choices: [
+				{ title: 'MongoDB config', value: 'db', selected: true },
+				{ title: 'CORS middleware', value: 'cors', selected: true },
+				{ title: 'Morgan logging', value: 'morgan', selected: true },
+				{ title: 'ESLint + Prettier', value: 'linting', selected: true },
+				{ title: 'Initialize Git repo', value: 'git', selected: true }
+			],
+			hint: '- Space to select. Return to submit'
+		}
+	]);
+	return {
+		db: features.includes('db'),
+		cors: features.includes('cors'),
+		morgan: features.includes('morgan'),
+		linting: features.includes('linting'),
+		git: features.includes('git')
+	};
 }
 
-exports.askOptionalFeatures = async () => {
-  const { addDatabase } = await prompts({
-    type: 'toggle',
-    name: 'addDatabase',
-    message: 'Do you want to add a MongoDB database config file?',
-    active: 'yes',
-    inactive: 'no'
-  });
-
-  const { appfile } = await prompts({
-    type: 'toggle',
-    name: 'appfile',
-    message: 'Do you want to add the default app.js & server.js files?',
-    active: 'yes',
-    inactive: 'no'
-  });
-  const { cors } = await prompts({
-    type: 'toggle',
-    name: 'cors',
-    message: 'Do you want to add CORS configuration?',
-    active: 'yes',
-    inactive: 'no'
-  });
-  const { morgan } = await prompts({
-    type: 'toggle',
-    name: 'morgan',
-    message: 'Do you want to add Morgan logging configuration?',
-    active: 'yes',
-    inactive: 'no'
-  });
-  const { globalError } = await prompts({
-    type: 'toggle',
-    name: 'globalError',
-    message: 'Do you want to add Global error handling?',
-    active: 'yes',
-    inactive: 'no'
-  });
-
-  return { addDatabase, appfile, cors, morgan, globalError };
-}
-
-// New prompt function to ask about template choice
 exports.askTemplateChoice = async (type) => {
-  const { templateType } = await prompts({
-    type: 'select',
-    name: 'templateType',
-    message: `Choose a template for your new ${type}:`,
-    choices: [
-      { title: 'Default (based on crud)', value: 'default' },
-      { title: 'Empty', value: 'empty' }
-    ],
-    initial: 0
-  });
-  return templateType;
+	const { templateType } = await prompts({
+		type: 'select',
+		name: 'templateType',
+		message: `Choose a template for the new ${type}:`,
+		choices: [
+			{ title: 'Default (with boilerplate)', value: 'default' },
+			{ title: 'Empty', value: 'empty' }
+		],
+		initial: 0
+	});
+	return templateType;
 };
-
 
 exports.askToOpen = async () => {
-  const { askToOpen } = await prompts({
-    type: 'toggle',
-    name: 'askToOpen',
-    message: 'Do you want to open the project in VS Code?',
-    active: 'yes',
-    inactive: 'no'
-  })
-  return askToOpen
+	const { open } = await prompts({
+		type: 'toggle',
+		name: 'open',
+		message: 'Open project in VS Code?',
+		initial: true,
+		active: 'yes',
+		inactive: 'no'
+	});
+	return open;
 }

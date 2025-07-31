@@ -1,8 +1,13 @@
 exports.modelTemplate = ({ lower, capitalized }) =>
-`const mongoose = require('mongoose');
+	`import mongoose from 'mongoose';
 
 const ${lower}Schema = new mongoose.Schema({
-    // TODO: define schema fields
+    // TODO: define more schema fields
+}, {
+    timestamps: true
 });
-module.exports = mongoose.model('${capitalized}', ${lower}Schema);
+
+const ${capitalized} = mongoose.model('${capitalized}', ${lower}Schema);
+
+export default ${capitalized};
 `

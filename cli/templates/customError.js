@@ -1,6 +1,4 @@
-// This template file defines the content for the CustomError class.
-
-exports.customErrorTemplate = `module.exports = class CustomError extends Error {
+exports.customErrorTemplate = `export default class CustomError extends Error {
         constructor(message, statusCode) {
             super(message);
             this.statusCode = statusCode;

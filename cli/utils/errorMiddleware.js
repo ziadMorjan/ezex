@@ -3,12 +3,12 @@
 const fs = require('fs');
 const path = require('path');
 // Import the errorTemplate from the updated errorHandler template file
-const { errorTemplate } = require("../templates/errorMiddleware");
-const { addApp } = require("../templates/addToApp");
+const { errorTemplate } = require('../templates/errorMiddleware');
+const { modifyApp } = require('../templates/modifyApp');
 
 exports.errorHandler = async (projectDir) => {
-    // Write the error handling middleware content to the new file path
-    fs.writeFileSync(path.join(projectDir, "middlewares", "errorMiddleware.js"), errorTemplate());
-    // Add the error handling middleware to the app.js file
-    addApp(projectDir, { error: true });
+	// Write the error handling middleware content to the new file path
+	fs.writeFileSync(path.join(projectDir, 'middlewares', 'errorMiddleware.js'), errorTemplate());
+	// Add the error handling middleware to the app.js file
+	modifyApp(projectDir, { error: true });
 };
