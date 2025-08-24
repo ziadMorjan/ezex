@@ -5,9 +5,11 @@ const { createModel, createController, createRouter } = require('./crud');
 const { logInfo, logError } = require('./utils/error');
 
 const args = minimist(process.argv.slice(2), {
-	boolean: ['db', 'cors', 'morgan', 'linting', 'git', 'force', 'dry-run'],
+	boolean: ['db', 'pg-orm', 'pg-raw', 'cors', 'morgan', 'linting', 'git', 'force', 'dry-run'],
 	alias: {
 		d: 'db',
+		o: 'pg-orm',
+		r: 'pg-raw',
 		c: 'cors',
 		m: 'morgan',
 		l: 'linting',
@@ -32,7 +34,9 @@ const opts = { force: args.force, dryRun: args['dry-run'] };
 		} else if (cmd === 'router') {
 			await createRouter(process.cwd(), name, opts);
 		} else {
-			logInfo('Usage: ezex create <dir> [options] | ezex model <name> | ezex controller <name> | ezex router <name>');
+			logInfo(
+				'Usage: ezex create <dir> [options] | ezex model <name> | ezex controller <name> | ezex router <name>'
+			);
 		}
 	} catch (err) {
 		logError('Command failed', err.message);

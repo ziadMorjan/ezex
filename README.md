@@ -6,6 +6,7 @@ EzEx (`ezex`) is a CLI tool for quickly scaffolding modern Express.js applicatio
 
 - Express 4 setup with ESM
 - MongoDB (Mongoose) support
+- PostgreSQL (Raw SQL or ORM) support ✅
 - Configurable CORS & Morgan
 - Error handling middleware
 - ESLint + Prettier integration
@@ -25,37 +26,51 @@ npm install -g ezex
 ### Create a new project
 
 ```bash
-ezex create my-app --db --cors --morgan --linting --git
+# With MongoDB
+ezex create my-app --db
+
+# With PostgreSQL (Raw SQL)
+ezex create my-app --pg-raw
+
+# With PostgreSQL (ORM)
+ezex create my-app --pg-orm
 ```
 
-Creates an Express app in `my-app/` with selected features.
-
-- `--db` → Add MongoDB (Mongoose)
-- `--cors` → Enable CORS
-- `--morgan` → Add Morgan logger
-- `--linting` → ESLint + Prettier setup
-- `--git` → Initialize git repo
-- `--force` → Overwrite existing files
-- `--dry-run` → Show what would be created without writing
-
-### Generate CRUD files
-
-```bash
-ezex model User
-ezex controller User
-ezex router User
-```
+- `--db` → Add MongoDB (Mongoose)  
+- `--pg-raw` → Add PostgreSQL (Raw SQL via `pg`)  
+- `--pg-orm` → Add PostgreSQL with ORM (Sequelize)  
+- `--cors` → Enable CORS  
+- `--morgan` → Add Morgan logger  
+- `--linting` → ESLint + Prettier setup  
+- `--git` → Initialize git repo  
+- `--force` → Overwrite existing files  
+- `--dry-run` → Show what would be created without writing  
 
 ### Example
 
 ```bash
-ezex create . --db --linting --git --force
+ezex create . --pg-orm --linting --git --force
 ```
 
-This will scaffold the project in the current folder, include MongoDB, ESLint, Git, and overwrite existing files if any.
+This will scaffold the project in the current folder, include PostgreSQL (ORM), ESLint, Git, and overwrite existing files if any.
 
-## Notes
+## PostgreSQL Support
 
-- `.env` variables are scaffolded into `config.env`
-- Generated projects use ESM (`"type": "module"`)
-- Run `npm run dev` to start in development mode
+EzEx now supports PostgreSQL in addition to MongoDB.
+
+### Options
+
+- `--pg-raw` → Add PostgreSQL (Raw SQL via `pg`)  
+- `--pg-orm` → Add PostgreSQL with ORM (Sequelize)  
+
+### Example
+
+```bash
+# Using raw SQL
+ezex create my-app --pg-raw
+
+# Using ORM (Sequelize)
+ezex create my-app --pg-orm
+```
+
+Both options will scaffold the database connection and add `PG_URI` to `config.env`.

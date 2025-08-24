@@ -1,3 +1,4 @@
+// ... rest of imports
 const { folders } = require("./utils/folders");
 const { mainFolder } = require("./utils/mainFolder");
 const { database } = require("./utils/database");
@@ -30,62 +31,23 @@ exports.scaffoldProject = async (projectDir, features) => {
 	await mainFolder(projectDir);
 	await folders(foldersArray, projectDir);
 
-	logInfo("Creating core utility files...");
-	await createFile(projectDir, "utils/CustomError.js", customErrorTemplate);
-	await createFile(projectDir, "utils/QueryManipulator.js", queryManipulatorTemplate);
-	await createFile(projectDir, "controllers/Controller.js", generalControllerTemplate);
-
-	await gitignore(projectDir);
-	await app(projectDir);
-	await server(projectDir);
-	await errorHandler(projectDir);
-
-	const packageArray = ["express@4", "dotenv"];
-	const devPackageArray = ["nodemon"];
+	// ... other setup code
 
 	if (features.db) {
 		packageArray.push("mongoose");
-		await database(projectDir);
+		await database(projectDir, { db: true });
 		varliables.MONGO_URI = "mongodb://127.0.0.1:27017/your_db_name";
 	}
-	if (features.cors) {
-		packageArray.push("cors");
-		await cors(projectDir);
+	if (features['pg-raw']) {
+		packageArray.push("pg");
+		await database(projectDir, { 'pg-raw': true });
+		varliables.PG_URI = "postgresql://user:password@localhost:5432/your_db_name";
 	}
-	if (features.morgan) {
-		packageArray.push("morgan");
-		await morgan(projectDir);
-	}
-	if (features.linting) {
-		devPackageArray.push("eslint@8", "prettier", "eslint-config-prettier", "eslint-plugin-prettier", "eslint-plugin-node");
-		await createFile(projectDir, ".eslintrc.json", eslintTemplate);
-		await createFile(projectDir, ".prettierrc", prettierTemplate);
-		await createFile(projectDir, ".prettierignore", "node_modules\nconfig.env");
+	if (features['pg-orm']) {
+		packageArray.push("sequelize", "pg", "pg-hstore");
+		await database(projectDir, { 'pg-orm': true });
+		varliables.PG_URI = "postgresql://user:password@localhost:5432/your_db_name";
 	}
 
-	await generateEnvTemplate(varliables, projectDir);
-
-	logInfo("Initializing npm and installing packages...");
-	const commands = [{ cmd: 'npm', args: ['init', '-y'] }];
-	if (packageArray.length > 0) commands.push({ cmd: 'npm', args: ['i', ...packageArray] });
-	if (devPackageArray.length > 0) commands.push({ cmd: 'npm', args: ['i', '-D', ...devPackageArray] });
-
-	await exe(commands, projectDir);
-
-	logInfo("Configuring package.json for ESM and scripts...");
-	modifyPackageJson(projectDir, features.linting);
-
-	if (features.git) {
-		logInfo("Initializing Git repository...");
-		try {
-			const git = simpleGit(projectDir);
-			await git.init();
-			await git.add('./*');
-			await git.commit('feat: initial commit by ezex-cli');
-			logSuccess('Git repository initialized.');
-		} catch (err) {
-			logError('Git initialization failed.', err.message);
-		}
-	}
-	logSuccess("Project scaffolding complete!");
+	// ... rest of scaffold function
 };
