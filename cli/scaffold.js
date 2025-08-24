@@ -1,5 +1,3 @@
-// إعادة هيكلة شاملة لدعم الميزات الجديدة
-
 const { folders } = require("./utils/folders");
 const { mainFolder } = require("./utils/mainFolder");
 const { database } = require("./utils/database");
@@ -59,8 +57,6 @@ exports.scaffoldProject = async (projectDir, features) => {
 		await morgan(projectDir);
 	}
 	if (features.linting) {
-		// --- التعديل هنا ---
-		// تم تحديد إصدار eslint ليكون 8 لضمان دعم .eslintrc.json
 		devPackageArray.push("eslint@8", "prettier", "eslint-config-prettier", "eslint-plugin-prettier", "eslint-plugin-node");
 		await createFile(projectDir, ".eslintrc.json", eslintTemplate);
 		await createFile(projectDir, ".prettierrc", prettierTemplate);
@@ -70,9 +66,9 @@ exports.scaffoldProject = async (projectDir, features) => {
 	await generateEnvTemplate(varliables, projectDir);
 
 	logInfo("Initializing npm and installing packages...");
-	const commands = ["npm init -y"];
-	if (packageArray.length > 0) commands.push(`npm i ${packageArray.join(' ')}`);
-	if (devPackageArray.length > 0) commands.push(`npm i -D ${devPackageArray.join(' ')}`);
+	const commands = [{ cmd: 'npm', args: ['init', '-y'] }];
+	if (packageArray.length > 0) commands.push({ cmd: 'npm', args: ['i', ...packageArray] });
+	if (devPackageArray.length > 0) commands.push({ cmd: 'npm', args: ['i', '-D', ...devPackageArray] });
 
 	await exe(commands, projectDir);
 

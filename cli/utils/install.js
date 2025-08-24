@@ -1,30 +1,23 @@
-
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const { logError } = require('./error');
 
-const runCommand = (command, cwd) => {
-	return new Promise((resolve, reject) => {
-		console.log(`\n> Running: ${command}\n`);
-		const process = exec(command, { cwd }, (error, stdout, stderr) => {
-			if (error) {
-				reject({ error, stderr });
-				return;
-			}
-			resolve({ stdout, stderr });
-		});
-		process.stdout.pipe(process.stdout);
-		process.stderr.pipe(process.stderr);
+const run = (cmd, args, cwd) =>
+	new Promise((resolve, reject) => {
+		console.log(`\n> Running: ${cmd} ${args.join(' ')}\n`);
+		const child = spawn(cmd, args, { cwd, stdio: 'inherit' });
+		child.on('error', reject);
+		child.on('close', (code) =>
+			code === 0 ? resolve() : reject(new Error(`${cmd} exited with code ${code}`))
+		);
 	});
-}
 
-exports.exe = async (commandsArray, projectDir) => {
-	for (const command of commandsArray) {
+exports.exe = async (commands, projectDir) => {
+	for (const { cmd, args } of commands) {
 		try {
-			await runCommand(command, projectDir);
+			await run(cmd, args, projectDir);
 		} catch (e) {
-			logError(`Failed to run command: '${command}'`, e.stderr || e.error.message);
-			// تتوقف العملية عند فشل أمر حاسم مثل npm install
-			throw new Error('Command execution failed.');
+			logError(`Failed to run: ${cmd} ${args.join(' ')}`, e.message);
+			throw e;
 		}
 	}
 };
